@@ -28,7 +28,6 @@ const login = createAsyncThunk(
     "auth/login",
     async (payload) => {
         const {username, password} = payload;
-        console.log(username, password)
         const config = {
             url: "http://127.0.0.1:8000/api/login_check",
             method: "post",
