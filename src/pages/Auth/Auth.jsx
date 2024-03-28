@@ -1,39 +1,73 @@
-import React, {useEffect, useState} from "react";
-import {Heading, Section} from "../../components/atoms";
+import React, {useContext, useEffect, useState} from "react";
+import {Button, Heading} from "../../components/atoms";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchPlaylists} from "../../stores";
+import {login} from "../../stores";
+import {AuthContext} from "../../contexts";
+import {LoginInputs} from "../../components/molecules";
+import styles from "./Auth.module.css"
+
 
 const Auth = () => {
-    const [isLoaded, setIsLoaded] = useState(false);
     const dispatch = useDispatch();
     const apiReturn = useSelector((state) => {
-        return state.playlists;
+        return state.auth;
     });
+    const authContext = useContext(AuthContext);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [sendForm, setSendForm] = useState(false);
+    const [error, setError] = useState("");
+    const [isLoginPage, setIsLoginPage] = useState(true)
 
     useEffect(() => {
-        dispatch(fetchPlaylists());
-    }, []);
+        if (username.trim() !== "" && password.trim() !== "") {
+            dispatch(login({"username": username, "password": password}));
+        }
+
+    }, [dispatch, sendForm]);
 
     useEffect(() => {
         if (apiReturn.status === "succeed") {
-            setIsLoaded(true);
+            authContext.setAuth(apiReturn.auth.token);
         } else if (apiReturn.status === "error") {
-            return;
+            setError(apiReturn.auth.message)
         }
-    }, [apiReturn]);
-    const handler = () => {
-        if(isLoaded) {
-            console.log(apiReturn.playlists.token)
-            return <span> Ohoh</span>
-        }else {
-            return <span>Ahah</span>
-        }
+    }, [apiReturn, authContext, error]);
 
+    const handleUsername = (e) => {
+        setUsername(e.target.value);
+    };
+
+    const handlePassword = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const handlerLogin = () => {
+        setSendForm(!sendForm);
     }
+
     return (
-        <Section>
-            <Heading> {handler()} Login</Heading>
-        </Section>
+        <div>
+            <Heading className={styles["title"]}>
+                <span onClick={() => {setIsLoginPage(true)}}>Connexion</span>
+                <span> | </span>
+                <span onClick={() => {setIsLoginPage(false)}}>Inscription</span>
+            </Heading>
+            {isLoginPage ? (
+                <>
+                    <LoginInputs onChangeUsername={handleUsername} usernameValue={username}
+                                 onChangePassword={handlePassword} passwordValue={password}/>
+                    <div className={styles["login-error"]}>
+                        {error}
+                        <Button text={"Connexion"} onClick={handlerLogin} className={styles["login-button"]}/>
+                    </div>
+                </>
+            ) : (
+                <>
+
+                </>
+            )}
+        </div>
     )
 }
 

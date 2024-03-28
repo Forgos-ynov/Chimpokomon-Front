@@ -1,10 +1,12 @@
 import React, {useState} from "react";
 import "./App.css";
 import {ThemeProvider} from "styled-components";
-import {NightProvider} from "./contexts";
+import {AuthProvider, NightProvider} from "./contexts";
 import {Provider} from "react-redux";
 import {store} from "./stores";
-import {AuthProvider} from "./providers";
+import {NightModeSwitch} from "./components/molecules";
+import {day, night, theme} from "./config";
+import functions from "./functions";
 // import {FaCarrot, FaLemon, FaPepperHot} from "react-icons/fa";
 // import {Menu} from "./components/organisms";
 // import {NightModeSwitch} from "./components/molecules";
@@ -32,22 +34,26 @@ import {AuthProvider} from "./providers";
 //     },
 // ];
 
-const day = {
-    primary: "white",
-    secondary: "#282c34"
-};
-
-const night = {
-    primary: "#282c34",
-    secondary: "white"
-};
-
 function App() {
     const [page, setPage] = useState("chili");
     const [isAuth, setIsAuth] = useState(false);
     const [isNightMode, setIsNightMode] = useState(false)
 
-    const invert = () => (isNightMode ? night : day);
+    const invert = () => {
+        return {...theme, ...(isNightMode ? day : night)};
+    };
+
+    const handlerAuth = (token) => {
+        if (typeof token === "string" && token.trim() !== "")
+        {
+            setIsAuth(true);
+            functions.setCookie(token, 10);
+        } else
+        {
+            setIsAuth(false);
+            functions.deleteCookie()
+        }
+    }
 
     const handlerNightMode = () => {
         setIsNightMode(!isNightMode);
@@ -84,15 +90,15 @@ function App() {
                     changeNightMode: () => setIsNightMode(!isNightMode),
                     nightMode: isNightMode
                 }}>
-                    <AuthProvider>
+                    <AuthProvider value={{
+                        isAuth: isAuth,
+                        setAuth: (auth) => handlerAuth(auth)
+                    }}>
                         Bonjour
                     </AuthProvider>
 
                     {/*<NightModeSwitch handler={handlerNightMode}/>*/}
                     {/*<Menu data={menuData} handler={handler} hanlderAuth={hanlderAuth} isAuth={isAuth}/>*/}
-                    {/*<Section>*/}
-                    {/*    <Heading>Hello h1</Heading>*/}
-                    {/*</Section>*/}
                     {/*<ToDoList data={""}/>*/}
                     {/*{renderPage()}*/}
                 </NightProvider>

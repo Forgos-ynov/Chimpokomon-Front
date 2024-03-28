@@ -1,38 +1,40 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 
-const playlistSlice = createSlice({
-    name: "playlist",
+const authSlice = createSlice({
+    name: "authentication",
     initialState: {
-        playlists: [],
+        auths: [],
         status: "idle",
         error: null,
     },
     reducers: {},
     extraReducers(builder) {
         builder
-            .addCase(fetchPlaylists.pending, (state, action) => {
+            .addCase(login.pending, (state) => {
                 state.status = "loading";
             })
-            .addCase(fetchPlaylists.fulfilled, (state, action) => {
-                state.status = "succeed";
-                state.playlists = action.payload;
+            .addCase(login.fulfilled, (state, action) => {
+                state.status = action.payload.status === 200 ? "succeed" : "error";
+                state.auth = action.payload;
             })
-            .addCase(fetchPlaylists.rejected, (state, action) => {
+            .addCase(login.rejected, (state) => {
                 state.status = "failed";
             });
     },
 });
 
-const fetchPlaylists = createAsyncThunk(
-    "playlist/fetchPlaylist",
+const login = createAsyncThunk(
+    "auth/login",
     async (payload) => {
+        const {username, password} = payload;
+        console.log(username, password)
         const config = {
             url: "http://127.0.0.1:8000/api/login_check",
             method: "post",
             data: {
-                "username": "admin",
-                "password": "password"
+                "username": username,
+                "password": password
             }
         };
         const response = await axios(config)
@@ -40,11 +42,18 @@ const fetchPlaylists = createAsyncThunk(
                 return res;
             })
             .catch((err) => {
-                return err;
+                return err.response;
             });
 
-        return response.data;
+        if (response.status === 200) {
+            let responseData = response.data;
+            responseData.status = 200;
+            return responseData;
+        } else {
+            return response.data;
+        }
+
     }
 );
 
-export {playlistSlice, fetchPlaylists}
+export {authSlice, login}

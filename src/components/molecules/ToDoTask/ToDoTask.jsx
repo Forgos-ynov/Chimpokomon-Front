@@ -10,9 +10,9 @@ const TodoTask = ({
                   }) => {
     return (
         <ListItem>
-            <InputText onChange={onChangeValue} value={textInputValue} />
-            <InputCheckbox onChange={onCheck} checked={checkBoxValue} />
-            <Button text="X" onClick={onDelete}></Button>
+            <InputText onChange={onChangeValue} value={textInputValue}/>
+            <InputCheckbox onChange={onCheck} checked={checkBoxValue}/>
+            <Button text="X" onClick={onDelete}/>
         </ListItem>
     );
 };
