@@ -18,32 +18,32 @@ function setCookie(valeur, jours, nom = "chimpokomon") {
  * Fonction permettant de récupérer un cookie
  *
  * @param nom
- * @returns {null|any|string}
+ * @returns {any|boolean}
  */
 function getCookie(nom = "chimpokomon") {
     const nomCookie = nom + "=";
     const cookies = decodeURIComponent(document.cookie).split(';');
-    for(let i = 0; i < cookies.length; i++) {
+    for (let i = 0; i < cookies.length; i++) {
         const cookie = cookies[i].trim();
         if (cookie.indexOf(nomCookie) === 0) {
-            const valeur = cookie.substring(nomCookie.length, cookie.length);
             try {
-                return JSON.parse(valeur);
+                return cookie.substring(nomCookie.length, cookie.length);
             } catch (error) {
-                return valeur;
+                console.log(error)
+                return false;
             }
         }
     }
-    return null;
+    return false;
 }
 
 /**
  * Fonction de suppression du cookie
  *
- * @param nom
+ * @param name
  */
-function deleteCookie(nom = "chimpokomon") {
-    document.cookie = nom + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+function deleteCookie(name = "chimpokomon") {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
 export default {setCookie, getCookie, deleteCookie}

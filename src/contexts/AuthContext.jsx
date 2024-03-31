@@ -2,13 +2,12 @@ import React, {createContext} from "react";
 import {Auth} from "../pages";
 import functions from "../functions";
 
-const cookie = functions.getCookie();
-const AuthContext = createContext(cookie);
+const AuthContext = createContext(!!functions.getCookie());
 
 const AuthProvider = ({value, ...props}) => {
     return (
         <AuthContext.Provider value={value}>
-            {value.isAuth || (typeof cookie === "string" && cookie.trim() !== "") ? props.children : <Auth/>}
+            {value.isAuth ? props.children : <Auth/>}
         </AuthContext.Provider>
     )
 }

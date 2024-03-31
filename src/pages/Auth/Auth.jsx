@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Heading} from "../../components/atoms";
 import styles from "./Auth.module.css"
-import {Login} from "../../components/organisms";
+import {Login, Register} from "../../components/organisms";
 
 const Auth = () => {
     const [isLoginPage, setIsLoginPage] = useState(true)
@@ -9,13 +9,15 @@ const Auth = () => {
     return (
         <div>
             <Heading className={styles["title"]}>
-                <span onClick={() => {setIsLoginPage(true)}}>Connexion</span>
+                <span onClick={() => {setIsLoginPage(true)}}
+                    style={{textDecoration: isLoginPage ? "underline" : "none"}}>Connexion</span>
                 <span> | </span>
-                <span onClick={() => {setIsLoginPage(false)}}>Inscription</span>
+                <span onClick={() => {setIsLoginPage(false)}}
+                      style={{textDecoration: isLoginPage ? "none" : "underline"}}>Inscription</span>
             </Heading>
             {isLoginPage
                 ? (<Login/>)
-                : (<>Register ici</>)
+                : (<Register/>)
             }
         </div>
     )

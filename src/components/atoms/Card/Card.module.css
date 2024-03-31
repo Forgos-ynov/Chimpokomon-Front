@@ -1,4 +1,14 @@
-.cardContainer
+.card-image
 {
-    border: 1px solid black;
+    width: 200px;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-origin: content-box;
+}
+
+.card-container
+{
+    overflow: hidden;
 }

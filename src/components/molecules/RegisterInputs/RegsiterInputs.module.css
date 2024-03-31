@@ -1,0 +1,26 @@
+.register-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+input {
+    font-size: 16px;
+    border-radius: 6px;
+    border: 2px solid black;
+    padding: 4px 8px;
+}
+
+.register-passwords input
+{
+    margin: 8px;
+}
+
+@media (max-width: 500px) {
+    .register-passwords {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

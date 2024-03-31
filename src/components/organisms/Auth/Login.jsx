@@ -14,15 +14,7 @@ const Login = () => {
     const authContext = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [sendForm, setSendForm] = useState(false);
     const [error, setError] = useState("");
-
-    useEffect(() => {
-        if (username.trim() !== "" && password.trim() !== "") {
-            dispatch(login({"username": username, "password": password}));
-        }
-
-    }, [dispatch, sendForm]);
 
     useEffect(() => {
         if (apiReturn.status === "succeed") {
@@ -41,7 +33,9 @@ const Login = () => {
     };
 
     const handlerLogin = () => {
-        setSendForm(!sendForm);
+        if (username.trim() !== "" && password.trim() !== "") {
+            dispatch(login({"username": username, "password": password}));
+        }
     }
 
     return (

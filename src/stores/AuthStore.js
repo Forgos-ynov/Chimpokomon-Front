@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
+import {api} from "../config";
 
 const authSlice = createSlice({
     name: "authentication",
@@ -11,6 +12,7 @@ const authSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder
+            // Partie login
             .addCase(login.pending, (state) => {
                 state.status = "loading";
             })
@@ -19,6 +21,18 @@ const authSlice = createSlice({
                 state.auth = action.payload;
             })
             .addCase(login.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            // Partie register
+            .addCase(register.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.status = action.payload.status === 201 ? "succeed" : "error";
+                state.auth = action.payload;
+            })
+            .addCase(register.rejected, (state) => {
                 state.status = "failed";
             });
     },
@@ -29,7 +43,7 @@ const login = createAsyncThunk(
     async (payload) => {
         const {username, password} = payload;
         const config = {
-            url: "http://127.0.0.1:8000/api/login_check",
+            url: `${api.url}/api/login_check`,
             method: "post",
             data: {
                 "username": username,
@@ -55,4 +69,35 @@ const login = createAsyncThunk(
     }
 );
 
-export {authSlice, login}
+const register = createAsyncThunk(
+    "auth/register",
+    async (payload) => {
+        const {username, password} = payload;
+        const config = {
+            url: `${api.url}/api/register`,
+            method: "post",
+            data: {
+                "username": username,
+                "password": password
+            }
+        };
+        const response = await axios(config)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err.response;
+            });
+
+        if (response.status === 201) {
+            let responseData = response.data;
+            responseData.status = 201;
+            return responseData;
+        } else {
+            return response.data;
+        }
+
+    }
+);
+
+export {authSlice, login, register}

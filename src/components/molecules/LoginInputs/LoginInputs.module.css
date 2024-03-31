@@ -6,7 +6,7 @@
     flex-wrap: wrap;
 }
 
-.login-inputs input
+input
 {
     font-size: 16px;
     border-radius: 6px;

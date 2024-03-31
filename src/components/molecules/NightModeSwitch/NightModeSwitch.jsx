@@ -7,7 +7,7 @@ const NightModeSwitch = ({handler, ...props}) => {
     const nighModeContext = useContext(NightModeContext);
 
     return <Button icon={nighModeContext.nightMode ? <FaMoon/> : <FaSun/> }
-                onClick={nighModeContext.changeNightMode}></Button>
+                onClick={nighModeContext.changeNightMode} width={"64px"} height={"64px"}></Button>
 }
 
 export default NightModeSwitch;

@@ -1,42 +1,17 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import "./App.css";
 import {ThemeProvider} from "styled-components";
-import {AuthProvider, NightProvider} from "./contexts";
+import {AuthContext, AuthProvider, NightProvider} from "./contexts";
 import {Provider} from "react-redux";
 import {store} from "./stores";
-import {NightModeSwitch} from "./components/molecules";
 import {day, night, theme} from "./config";
 import functions from "./functions";
-// import {FaCarrot, FaLemon, FaPepperHot} from "react-icons/fa";
-// import {Menu} from "./components/organisms";
-// import {NightModeSwitch} from "./components/molecules";
-// import {Heading, Section} from "./components/atoms";
-// import ToDoList from "./components/organisms/ToDoList/ToDoList";
-// import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-// import {Auth, Register} from "./pages";
-// import AuthRoute from "./components/AuthRoute";
-//
-// const menuData = [
-//     {
-//         icon: <FaPepperHot></FaPepperHot>,
-//         text: "Chili",
-//         value: "chili",
-//     },
-//     {
-//         icon: <FaCarrot></FaCarrot>,
-//         text: "Carrot",
-//         value: "carrot",
-//     },
-//     {
-//         icon: <FaLemon></FaLemon>,
-//         text: "Lemon",
-//         value: "lemon",
-//     },
-// ];
+import {Accueil, Auth} from "./pages";
 
 function App() {
     const [page, setPage] = useState("chili");
-    const [isAuth, setIsAuth] = useState(false);
+    const authContext = useContext(AuthContext);
+    const [isAuth, setIsAuth] = useState(authContext);
     const [isNightMode, setIsNightMode] = useState(false)
 
     const invert = () => {
@@ -61,27 +36,20 @@ function App() {
 
     const renderPage = () => {
         switch (page) {
-            case "carrot":
-                return <div>Carrot</div>
-                break;
-            case "lemon":
-                return <div>Lemon</div>
-                break;
             default:
-                return <div>Chili</div>
+            case "accueil":
+                return <Accueil handlerPage={handlerPage} handlerAuth={handlerAuth} handlerNightMode={handlerNightMode}/>
+                break;
+
+            case "logout":
+                return <Auth/>
                 break;
         }
     }
 
-    const handler = (pageName) => {
+    const handlerPage = (pageName) => {
         setPage(pageName);
     }
-
-    const hanlderAuth = (isAuth) => {
-        setIsAuth(isAuth);
-    }
-
-
 
     return (
         <Provider store={store}>
@@ -94,13 +62,8 @@ function App() {
                         isAuth: isAuth,
                         setAuth: (auth) => handlerAuth(auth)
                     }}>
-                        Bonjour
+                        {renderPage()}
                     </AuthProvider>
-
-                    {/*<NightModeSwitch handler={handlerNightMode}/>*/}
-                    {/*<Menu data={menuData} handler={handler} hanlderAuth={hanlderAuth} isAuth={isAuth}/>*/}
-                    {/*<ToDoList data={""}/>*/}
-                    {/*{renderPage()}*/}
                 </NightProvider>
             </ThemeProvider>
         </Provider>

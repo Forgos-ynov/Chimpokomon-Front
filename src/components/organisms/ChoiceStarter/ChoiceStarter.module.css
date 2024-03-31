@@ -1,0 +1,12 @@
+.starter-choice
+{
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card-body
+{
+    margin: 4px;
+}
