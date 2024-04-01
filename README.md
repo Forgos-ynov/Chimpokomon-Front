@@ -1,5 +1,5 @@
 # Chimpokomon-Front
 Projet React de cours de FullStack en M1, cette partie est le front, le back lui est dans le repository Chimpokomon-API
 
-1. Installer les dépendances en utilisant npm (=> npm install)
-2. Lancer le serveur en utilisant npm (=> npm start)
+1. Installer les dépendances en utilisant npm (=> ```npm install```)
+2. Lancer le serveur en utilisant npm (=> ```npm start```)
