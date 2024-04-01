@@ -1,17 +1,20 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {chimpokodexRandom} from "../../../stores";
+import {chimpokodexRandom, createTeam} from "../../../stores";
 import {AuthContext} from "../../../contexts";
 import styles from "./ChoiceStarter.module.css"
 import {CardChoiceStarter, StatsJauge} from "../../molecules";
 
-const ChoiceStarter = () => {
+const ChoiceStarter = ({handlerSendApi, ...props}) => {
     const authContext = useContext(AuthContext);
     const [sendApi, setSendApi] = useState(false);
     const dispatch = useDispatch();
     const apiReturn = useSelector((state) => {
         return state.chimpokodex;
     });
+    // const apiReturnCreateTeam = useSelector(state => {
+    //    return state.team;
+    // });
     const [aStarters, setAStarters] = useState([]);
 
     useEffect(() => {
@@ -24,7 +27,7 @@ const ChoiceStarter = () => {
                 }
             }
         }
-    }, [apiReturn]);
+    }, [apiReturn, authContext]);
 
     useEffect(() => {
         if (!sendApi) {
@@ -33,8 +36,9 @@ const ChoiceStarter = () => {
         }
     }, [sendApi]);
 
-    const handlerChoiceStarter = () => {
-        console.log("cgberhi");
+    const handlerChoiceStarter = (idChimpokodex) => {
+        dispatch(createTeam({data: {"chimpokodexId": idChimpokodex}}));
+        handlerSendApi(false);
     };
 
     const CardBody = (chimpokodexProps) => {
@@ -52,7 +56,7 @@ const ChoiceStarter = () => {
         <>
             <div className={styles["starter-choice"]}>
                 {aStarters.map((element, index) => (
-                    <CardChoiceStarter key={index} element={element} handler={handlerChoiceStarter}>
+                    <CardChoiceStarter key={index} element={element} handler={() => handlerChoiceStarter(element.id)}>
                         <CardBody chimpokodexProps={element}/>
                     </CardChoiceStarter>
                 ))}

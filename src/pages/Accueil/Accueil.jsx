@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {ChoiceStarter, Menu} from "../../components/organisms";
+import {ChoiceStarter, Fight, Menu} from "../../components/organisms";
 import {useDispatch, useSelector} from "react-redux";
 import {userTeam} from "../../stores";
 import {AuthContext} from "../../contexts";
@@ -7,6 +7,7 @@ import {AuthContext} from "../../contexts";
 const Accueil = ({handlerPage, handlerAuth, handlerNightMode}) => {
     const menu = [];
     const authContext = useContext(AuthContext);
+    const [chimpokomon, setChimpokomon] = useState({})
     const [sendApi, setSendApi] = useState(false);
     const dispatch = useDispatch();
     const apiReturn = useSelector((state) => {
@@ -16,7 +17,8 @@ const Accueil = ({handlerPage, handlerAuth, handlerNightMode}) => {
 
     useEffect(() => {
         if (apiReturn.status === "succeed") {
-            console.log("team result:", apiReturn)
+            setDisplayer("team");
+            setChimpokomon(apiReturn.auth);
         } else if (apiReturn.status === "NoTeam") {
             setDisplayer("NoTeam");
         } else if (apiReturn.status === "error") {
@@ -41,7 +43,11 @@ const Accueil = ({handlerPage, handlerAuth, handlerNightMode}) => {
         switch (displayer) {
             default:
             case "NoTeam":
-                return <ChoiceStarter/>
+                return <ChoiceStarter handlerSendApi={setSendApi}/>
+                break;
+
+            case "team":
+                return <Fight chimpokomon={chimpokomon}/>
                 break;
         }
     }

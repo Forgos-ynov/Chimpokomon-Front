@@ -1,0 +1,12 @@
+.fight-container
+{
+    width: 100vw;
+    height: 100vh;
+}
+
+.fight-element
+{
+    position: absolute;
+    bottom: 10%;
+    left: 10%;
+}
